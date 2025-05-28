@@ -281,11 +281,6 @@
         <div class="posts-section">
             <h2 style="margin-bottom: 30px; font-weight: 400;">I tuoi post</h2>
             
-            <div class="posts-index" id="postsIndexStatus">
-                <h3 style="margin-bottom: 10px;">Stato del caricamento</h3>
-                <p id="loadingStatus">Controllo presenza di posts-index.json...</p>
-            </div>
-            
             <div id="postsContainer">
                 <div class="empty-state">
                     <p>Caricamento post in corso...</p>
@@ -442,35 +437,6 @@ Per approfondire:
                 })
                 .join('');
         }
-
-        // Aggiungi nuovo post
-        document.getElementById('postForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-            
-            const newPost = {
-                id: 'post-' + Date.now(),
-                title: title,
-                content: content,
-                date: new Date().toLocaleDateString('it-IT'),
-                dateISO: new Date().toISOString().split('T')[0],
-                author: 'AI Blog',
-                categories: ['AI'],
-                tags: ['intelligenza-artificiale'],
-                fileName: generateFileName(title, new Date().toLocaleDateString('it-IT'))
-            };
-            
-            posts.unshift(newPost);
-            renderPosts();
-            
-            // Reset form
-            document.getElementById('title').value = '';
-            document.getElementById('content').value = '';
-            
-            alert('Post aggiunto! Ricorda di generare il nuovo posts-index.json');
-        });
 
         // Genera nome file
         function generateFileName(title, dateString) {
