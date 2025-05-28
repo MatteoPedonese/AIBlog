@@ -97,10 +97,20 @@
             cursor: pointer;
             font-size: 16px;
             transition: background 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
         }
 
         .btn:hover {
             background: #755f46;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
         }
 
         .posts-section {
@@ -218,6 +228,34 @@
             margin-top: 10px;
         }
 
+        .github-instructions {
+            background: #e8f4fd;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .github-instructions h3 {
+            color: #0c5460;
+            margin-bottom: 15px;
+        }
+
+        .github-instructions code {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .posts-index {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #f0ece4;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px 15px;
@@ -239,6 +277,17 @@
             <h1>AI Blog</h1>
             <div class="subtitle">Pensieri, codice e osservazioni sull'intelligenza artificiale</div>
         </header>
+
+        <div class="github-instructions">
+            <h3>🚀 Setup per GitHub Pages</h3>
+            <p>Per visualizzare i post su GitHub Pages, devi creare un file <code>posts-index.json</code> nella root del repository:</p>
+            <ol style="margin: 15px 0 15px 20px;">
+                <li>Scrivi i tuoi post nell'editor qui sotto</li>
+                <li>Clicca "Genera posts-index.json" per creare l'indice</li>
+                <li>Carica il file nel tuo repository GitHub</li>
+                <li>I post verranno visualizzati automaticamente!</li>
+            </ol>
+        </div>
 
         <div class="new-post-section">
             <h2 style="margin-bottom: 20px; font-weight: 400;">Nuovo Post</h2>
@@ -275,32 +324,74 @@ def hello_ai():
         </div>
 
         <div class="export-section">
-            <button onclick="exportPosts()" class="btn">Esporta tutti i post come JSON</button>
+            <button onclick="generatePostsIndex()" class="btn">📝 Genera posts-index.json</button>
+            <button onclick="exportAllPostsAsMarkdown()" class="btn btn-secondary">📥 Scarica file Markdown</button>
             <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
-                Salva i tuoi post per backup o per importarli in un repository GitHub
+                Il file <code>posts-index.json</code> permette a GitHub Pages di caricare i tuoi post
             </div>
         </div>
 
         <div class="posts-section">
             <h2 style="margin-bottom: 30px; font-weight: 400;">I tuoi post</h2>
+            
+            <div class="posts-index" id="postsIndexStatus">
+                <h3 style="margin-bottom: 10px;">Stato del caricamento</h3>
+                <p id="loadingStatus">Controllo presenza di posts-index.json...</p>
+            </div>
+            
             <div id="postsContainer">
                 <div class="empty-state">
-                    <p>Nessun post ancora. Scrivi il tuo primo post sull'AI!</p>
+                    <p>Caricamento post in corso...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Simulazione di un sistema di storage locale (da sostituire con GitHub API)
+        // Sistema per GitHub Pages - usa un file indice JSON
         let posts = [];
+        let isLoading = false;
 
-        // Carica i post esistenti (simulato)
-        function loadPosts() {
-            // In una versione reale, questi verrebbero caricati da file markdown
-            const samplePosts = [
+        // Carica i post da posts-index.json
+        async function loadPosts() {
+            isLoading = true;
+            updateLoadingStatus('Caricamento post in corso...');
+            
+            try {
+                const response = await fetch('posts-index.json?' + Date.now()); // Cache busting
+                
+                if (!response.ok) {
+                    throw new Error('File posts-index.json non trovato');
+                }
+                
+                const postsData = await response.json();
+                posts = postsData.sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO));
+                
+                updateLoadingStatus(`✅ Caricati ${posts.length} post da posts-index.json`);
+                
+            } catch (error) {
+                console.log('posts-index.json non trovato, carico post di esempio');
+                loadSamplePosts();
+                updateLoadingStatus('⚠️ File posts-index.json non trovato. Usando post di esempio.');
+            }
+            
+            isLoading = false;
+            renderPosts();
+        }
+
+        // Aggiorna lo status di caricamento
+        function updateLoadingStatus(message) {
+            const statusEl = document.getElementById('loadingStatus');
+            if (statusEl) {
+                statusEl.textContent = message;
+            }
+        }
+
+        // Carica post di esempio
+        function loadSamplePosts() {
+            posts = [
                 {
-                    id: 1,
+                    id: 'sample-1',
                     title: "Introduzione ai Framework per AI",
                     content: `# Introduzione ai Framework per AI
 
@@ -325,13 +416,22 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 \`\`\`
 
-Questo è solo l'inizio di un mondo affascinante!`,
-                    date: new Date().toLocaleDateString('it-IT')
+Questo è solo l'inizio di un mondo affascinante!
+
+## Risorse utili
+
+Per approfondire:
+- **Documentazione TensorFlow**: Completa e ben strutturata
+- **PyTorch Tutorials**: Perfetti per iniziare
+- **Kaggle**: Per datasets e competizioni`,
+                    date: new Date().toLocaleDateString('it-IT'),
+                    dateISO: new Date().toISOString().split('T')[0],
+                    author: 'AI Blog',
+                    categories: ['AI', 'Framework'],
+                    tags: ['tensorflow', 'pytorch', 'machine-learning'],
+                    fileName: '2025-01-15-introduzione-ai-framework.md'
                 }
             ];
-            
-            posts = samplePosts;
-            renderPosts();
         }
 
         // Renderizza i post
@@ -339,37 +439,60 @@ Questo è solo l'inizio di un mondo affascinante!`,
             const container = document.getElementById('postsContainer');
             
             if (posts.length === 0) {
-                container.innerHTML = '<div class="empty-state"><p>Nessun post ancora. Scrivi il tuo primo post sull\'AI!</p></div>';
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p>Nessun post trovato</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: #888;">
+                            Scrivi il tuo primo post e genera il file posts-index.json
+                        </p>
+                    </div>
+                `;
                 return;
             }
 
             container.innerHTML = posts.map(post => `
                 <article class="post">
-                    <button class="delete-btn" onclick="deletePost(${post.id})" title="Elimina post">×</button>
-                    <div class="post-meta">${post.date}</div>
+                    <button class="delete-btn" onclick="deletePost('${post.id}')" title="Elimina post">×</button>
+                    <div class="post-meta">
+                        ${post.date} 
+                        ${post.fileName ? `• <code>${post.fileName}</code>` : ''}
+                        ${post.author && post.author !== 'AI Blog' ? `• ${post.author}` : ''}
+                    </div>
                     <h2 class="post-title">${post.title}</h2>
                     <div class="post-content">${parseMarkdown(post.content)}</div>
+                    ${post.categories && post.categories.length > 0 ? `
+                        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
+                            <small style="color: #666;">
+                                Categorie: ${post.categories.join(', ')} 
+                                ${post.tags && post.tags.length > 0 ? `• Tag: ${post.tags.join(', ')}` : ''}
+                            </small>
+                        </div>
+                    ` : ''}
                 </article>
             `).join('');
         }
 
-        // Parser Markdown semplificato
+        // Parser Markdown
         function parseMarkdown(text) {
             return text
-                // Blocchi di codice
                 .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-                // Codice inline
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
-                // Titoli
                 .replace(/^### (.*$)/gm, '<h3>$1</h3>')
                 .replace(/^## (.*$)/gm, '<h2>$1</h2>')
                 .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-                // Grassetto e corsivo
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                // Paragrafi
+                .replace(/^\- (.*$)/gm, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
                 .split('\n\n')
-                .map(paragraph => paragraph.trim() ? `<p>${paragraph.replace(/\n/g, '<br>')}</p>` : '')
+                .map(paragraph => {
+                    if (paragraph.includes('<h1>') || paragraph.includes('<h2>') || 
+                        paragraph.includes('<h3>') || paragraph.includes('<pre>') || 
+                        paragraph.includes('<ul>')) {
+                        return paragraph;
+                    }
+                    return paragraph.trim() ? `<p>${paragraph.replace(/\n/g, '<br>')}</p>` : '';
+                })
                 .join('');
         }
 
@@ -381,10 +504,15 @@ Questo è solo l'inizio di un mondo affascinante!`,
             const content = document.getElementById('content').value;
             
             const newPost = {
-                id: Date.now(),
+                id: 'post-' + Date.now(),
                 title: title,
                 content: content,
-                date: new Date().toLocaleDateString('it-IT')
+                date: new Date().toLocaleDateString('it-IT'),
+                dateISO: new Date().toISOString().split('T')[0],
+                author: 'AI Blog',
+                categories: ['AI'],
+                tags: ['intelligenza-artificiale'],
+                fileName: generateFileName(title, new Date().toLocaleDateString('it-IT'))
             };
             
             posts.unshift(newPost);
@@ -394,8 +522,93 @@ Questo è solo l'inizio di un mondo affascinante!`,
             document.getElementById('title').value = '';
             document.getElementById('content').value = '';
             
-            alert('Post pubblicato con successo!');
+            alert('Post aggiunto! Ricorda di generare il nuovo posts-index.json');
         });
+
+        // Genera nome file
+        function generateFileName(title, dateString) {
+            const [day, month, year] = dateString.split('/');
+            const isoDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            
+            const slug = title
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim('-');
+            
+            return `${isoDate}-${slug}.md`;
+        }
+
+        // Genera posts-index.json
+        function generatePostsIndex() {
+            if (posts.length === 0) {
+                alert('Nessun post da includere nell\'indice!');
+                return;
+            }
+            
+            const indexData = posts.map(post => ({
+                id: post.id,
+                title: post.title,
+                content: post.content,
+                date: post.date,
+                dateISO: post.dateISO,
+                author: post.author,
+                categories: post.categories,
+                tags: post.tags,
+                fileName: post.fileName
+            }));
+            
+            const jsonString = JSON.stringify(indexData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'posts-index.json';
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            
+            alert('File posts-index.json generato! Caricalo nella root del tuo repository GitHub.');
+        }
+
+        // Esporta tutti i post come Markdown
+        async function exportAllPostsAsMarkdown() {
+            if (posts.length === 0) {
+                alert('Nessun post da esportare!');
+                return;
+            }
+            
+            for (const post of posts) {
+                const frontmatter = `---
+title: "${post.title}"
+date: ${post.dateISO}
+author: "${post.author}"
+categories: [${post.categories.map(c => `"${c}"`).join(', ')}]
+tags: [${post.tags.map(t => `"${t}"`).join(', ')}]
+---
+
+`;
+                
+                const content = frontmatter + post.content;
+                const blob = new Blob([content], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = post.fileName;
+                link.click();
+                
+                URL.revokeObjectURL(url);
+                
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            alert(`Esportati ${posts.length} file Markdown!`);
+        }
 
         // Elimina post
         function deletePost(id) {
@@ -405,20 +618,7 @@ Questo è solo l'inizio di un mondo affascinante!`,
             }
         }
 
-        // Esporta posts come JSON
-        function exportPosts() {
-            const dataStr = JSON.stringify(posts, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = 'ai-blog-posts.json';
-            link.click();
-            
-            alert('Post esportati! Puoi utilizzare questo file per creare i file markdown nel tuo repository GitHub.');
-        }
-
-        // Inizializza l'app
+        // Inizializza
         loadPosts();
     </script>
 </body>
