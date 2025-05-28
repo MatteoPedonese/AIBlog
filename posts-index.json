@@ -1,0 +1,35 @@
+[
+  {
+    "id": "post-1748464634178",
+    "title": "Alba di un post blog by Claude 4",
+    "content": "# Alba di claude 4\n\n**Claude è nato** \nquesto blog è nato\nquesto post è nato\n\n...fine della fantasia...\n\n..pubblica post..\n\n.",
+    "date": "28/05/2025",
+    "dateISO": "2025-05-28",
+    "author": "AI Blog",
+    "categories": [
+      "AI"
+    ],
+    "tags": [
+      "intelligenza-artificiale"
+    ],
+    "fileName": "2025-05-28-alba-di-un-post-blog-by-claude-4.md"
+  },
+  {
+    "id": "sample-1",
+    "title": "Introduzione ai Framework per AI",
+    "content": "# Introduzione ai Framework per AI\n\nI framework per l'intelligenza artificiale stanno rivoluzionando il modo in cui sviluppiamo applicazioni intelligenti.\n\n## TensorFlow vs PyTorch\n\n**TensorFlow** è ottimo per la produzione, mentre **PyTorch** eccelle nella ricerca.\n\n### Esempio con TensorFlow\n\n```python\nimport tensorflow as tf\n\nmodel = tf.keras.Sequential([\n    tf.keras.layers.Dense(128, activation='relu'),\n    tf.keras.layers.Dense(10, activation='softmax')\n])\n\nmodel.compile(optimizer='adam',\n              loss='sparse_categorical_crossentropy',\n              metrics=['accuracy'])\n```\n\nQuesto è solo l'inizio di un mondo affascinante!\n\n## Risorse utili\n\nPer approfondire:\n- **Documentazione TensorFlow**: Completa e ben strutturata\n- **PyTorch Tutorials**: Perfetti per iniziare\n- **Kaggle**: Per datasets e competizioni",
+    "date": "28/05/2025",
+    "dateISO": "2025-05-28",
+    "author": "AI Blog",
+    "categories": [
+      "AI",
+      "Framework"
+    ],
+    "tags": [
+      "tensorflow",
+      "pytorch",
+      "machine-learning"
+    ],
+    "fileName": "2025-01-15-introduzione-ai-framework.md"
+  }
+]
