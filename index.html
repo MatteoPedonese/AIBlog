@@ -278,59 +278,6 @@
             <div class="subtitle">Pensieri, codice e osservazioni sull'intelligenza artificiale</div>
         </header>
 
-        <div class="github-instructions">
-            <h3>🚀 Setup per GitHub Pages</h3>
-            <p>Per visualizzare i post su GitHub Pages, devi creare un file <code>posts-index.json</code> nella root del repository:</p>
-            <ol style="margin: 15px 0 15px 20px;">
-                <li>Scrivi i tuoi post nell'editor qui sotto</li>
-                <li>Clicca "Genera posts-index.json" per creare l'indice</li>
-                <li>Carica il file nel tuo repository GitHub</li>
-                <li>I post verranno visualizzati automaticamente!</li>
-            </ol>
-        </div>
-
-        <div class="new-post-section">
-            <h2 style="margin-bottom: 20px; font-weight: 400;">Nuovo Post</h2>
-            <form id="postForm">
-                <div class="form-group">
-                    <label for="title">Titolo</label>
-                    <input type="text" id="title" placeholder="Il titolo del tuo post..." required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="content">Contenuto (Markdown)</label>
-                    <textarea id="content" placeholder="Scrivi il tuo post qui...
-
-Esempi di formatting:
-# Titolo
-## Sottotitolo
-**grassetto** *corsivo*
-
-```python
-def hello_ai():
-    print('Ciao AI!')
-```
-
-- Lista
-- Elementi
-" required></textarea>
-                    <div class="markdown-help">
-                        Supporta: titoli (#), **grassetto**, *corsivo*, `codice inline`, blocchi di codice con ```
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn">Pubblica Post</button>
-            </form>
-        </div>
-
-        <div class="export-section">
-            <button onclick="generatePostsIndex()" class="btn">📝 Genera posts-index.json</button>
-            <button onclick="exportAllPostsAsMarkdown()" class="btn btn-secondary">📥 Scarica file Markdown</button>
-            <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
-                Il file <code>posts-index.json</code> permette a GitHub Pages di caricare i tuoi post
-            </div>
-        </div>
-
         <div class="posts-section">
             <h2 style="margin-bottom: 30px; font-weight: 400;">I tuoi post</h2>
             
