@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Blog - Pensieri e Codice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+            background-color: #faf9f5;
+            color: #2c2c2c;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e8e6e0;
+            padding-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        .new-post-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #f0ece4;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e8e6e0;
+            border-radius: 6px;
+            font-size: 16px;
+            background: #faf9f5;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #8b7355;
+            background: white;
+        }
+
+        textarea {
+            min-height: 300px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            resize: vertical;
+        }
+
+        .btn {
+            background: #8b7355;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #755f46;
+        }
+
+        .posts-section {
+            margin-top: 40px;
+        }
+
+        .post {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #f0ece4;
+            position: relative;
+        }
+
+        .post-meta {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f5f5f5;
+            padding-bottom: 10px;
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h1, .post-content h2, .post-content h3 {
+            margin: 20px 0 15px 0;
+            color: #2c2c2c;
+        }
+
+        .post-content h1 { font-size: 1.8rem; font-weight: 500; }
+        .post-content h2 { font-size: 1.4rem; font-weight: 500; }
+        .post-content h3 { font-size: 1.2rem; font-weight: 500; }
+
+        .post-content p {
+            margin-bottom: 15px;
+        }
+
+        .post-content strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .post-content em {
+            font-style: italic;
+            color: #555;
+        }
+
+        .post-content pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+        }
+
+        .post-content code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .export-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #f0ece4;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .markdown-help {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .new-post-section, .post {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Blog</h1>
+            <div class="subtitle">Pensieri, codice e osservazioni sull'intelligenza artificiale</div>
+        </header>
+
+        <div class="new-post-section">
+            <h2 style="margin-bottom: 20px; font-weight: 400;">Nuovo Post</h2>
+            <form id="postForm">
+                <div class="form-group">
+                    <label for="title">Titolo</label>
+                    <input type="text" id="title" placeholder="Il titolo del tuo post..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">Contenuto (Markdown)</label>
+                    <textarea id="content" placeholder="Scrivi il tuo post qui...
+
+Esempi di formatting:
+# Titolo
+## Sottotitolo
+**grassetto** *corsivo*
+
+```python
+def hello_ai():
+    print('Ciao AI!')
+```
+
+- Lista
+- Elementi
+" required></textarea>
+                    <div class="markdown-help">
+                        Supporta: titoli (#), **grassetto**, *corsivo*, `codice inline`, blocchi di codice con ```
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn">Pubblica Post</button>
+            </form>
+        </div>
+
+        <div class="export-section">
+            <button onclick="exportPosts()" class="btn">Esporta tutti i post come JSON</button>
+            <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                Salva i tuoi post per backup o per importarli in un repository GitHub
+            </div>
+        </div>
+
+        <div class="posts-section">
+            <h2 style="margin-bottom: 30px; font-weight: 400;">I tuoi post</h2>
+            <div id="postsContainer">
+                <div class="empty-state">
+                    <p>Nessun post ancora. Scrivi il tuo primo post sull'AI!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulazione di un sistema di storage locale (da sostituire con GitHub API)
+        let posts = [];
+
+        // Carica i post esistenti (simulato)
+        function loadPosts() {
+            // In una versione reale, questi verrebbero caricati da file markdown
+            const samplePosts = [
+                {
+                    id: 1,
+                    title: "Introduzione ai Framework per AI",
+                    content: `# Introduzione ai Framework per AI
+
+I framework per l'intelligenza artificiale stanno rivoluzionando il modo in cui sviluppiamo applicazioni intelligenti.
+
+## TensorFlow vs PyTorch
+
+**TensorFlow** è ottimo per la produzione, mentre **PyTorch** eccelle nella ricerca.
+
+### Esempio con TensorFlow
+
+\`\`\`python
+import tensorflow as tf
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dense(10, activation='softmax')
+])
+
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+\`\`\`
+
+Questo è solo l'inizio di un mondo affascinante!`,
+                    date: new Date().toLocaleDateString('it-IT')
+                }
+            ];
+            
+            posts = samplePosts;
+            renderPosts();
+        }
+
+        // Renderizza i post
+        function renderPosts() {
+            const container = document.getElementById('postsContainer');
+            
+            if (posts.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>Nessun post ancora. Scrivi il tuo primo post sull\'AI!</p></div>';
+                return;
+            }
+
+            container.innerHTML = posts.map(post => `
+                <article class="post">
+                    <button class="delete-btn" onclick="deletePost(${post.id})" title="Elimina post">×</button>
+                    <div class="post-meta">${post.date}</div>
+                    <h2 class="post-title">${post.title}</h2>
+                    <div class="post-content">${parseMarkdown(post.content)}</div>
+                </article>
+            `).join('');
+        }
+
+        // Parser Markdown semplificato
+        function parseMarkdown(text) {
+            return text
+                // Blocchi di codice
+                .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                // Codice inline
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                // Titoli
+                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                // Grassetto e corsivo
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                // Paragrafi
+                .split('\n\n')
+                .map(paragraph => paragraph.trim() ? `<p>${paragraph.replace(/\n/g, '<br>')}</p>` : '')
+                .join('');
+        }
+
+        // Aggiungi nuovo post
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                date: new Date().toLocaleDateString('it-IT')
+            };
+            
+            posts.unshift(newPost);
+            renderPosts();
+            
+            // Reset form
+            document.getElementById('title').value = '';
+            document.getElementById('content').value = '';
+            
+            alert('Post pubblicato con successo!');
+        });
+
+        // Elimina post
+        function deletePost(id) {
+            if (confirm('Sei sicuro di voler eliminare questo post?')) {
+                posts = posts.filter(post => post.id !== id);
+                renderPosts();
+            }
+        }
+
+        // Esporta posts come JSON
+        function exportPosts() {
+            const dataStr = JSON.stringify(posts, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'ai-blog-posts.json';
+            link.click();
+            
+            alert('Post esportati! Puoi utilizzare questo file per creare i file markdown nel tuo repository GitHub.');
+        }
+
+        // Inizializza l'app
+        loadPosts();
+    </script>
+</body>
+</html>
